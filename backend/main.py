@@ -1,48 +1,39 @@
 import os
-from dotenv import load_dotenv # Add this import
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-# Load environment variables IMMEDIATELY
-load_dotenv() 
+# Load environment variables for credentials
+load_dotenv()
 
 from core.models.triage import TriageRequest, TriageResponse
 from core.factory import get_provider
 
-# Global provider instance
-active_provider = None
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Initialize the active provider instrument
-    global active_provider
-    active_provider = get_provider()
-    print(f"Orchestra 8000: {active_provider.provider_name} is tuned and ready.")
+    print("Orchestra 8000: Conductor is taking the stage...")
     yield
-    # Shutdown: Clean up resources
-    if active_provider:
-        await active_provider.close()
+    print("Orchestra 8000: Curtains closing.")
 
-app = FastAPI(title="Orchestra 8000 Gateway", lifespan=lifespan)
+app = FastAPI(lifespan=lifespan)
 
-# Enable CORS for the React Frontend (Port 5173)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 @app.post("/triage", response_model=TriageResponse)
 async def perform_triage(request: TriageRequest):
-    if not active_provider:
-        raise HTTPException(status_code=503, detail="Orchestra not ready")
-    
     try:
-        return await active_provider.process_request(request)
+        provider = get_provider(request.provider)
+        result = await provider.process_request(request)
+        await provider.close() # Clean up the provider session
+        return result
     except Exception as e:
+        print(f"Orchestra Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":

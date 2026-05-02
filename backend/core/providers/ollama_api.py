@@ -1,12 +1,12 @@
+import httpx
 import os
-from groq import Groq
 from core.providers.base import LLMProvider
 from core.models.triage import TriageRequest, TriageResponse, SeverityEnum
 
-class GroqProvider(LLMProvider):
+class OllamaProvider(LLMProvider):
     def __init__(self):
         super().__init__()
-        self.client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+        self.base_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 
     async def close(self):
         # Implementation of the abstract method
@@ -20,11 +20,13 @@ class GroqProvider(LLMProvider):
             f"SEVERITY: [low, medium, high, or critical]\n"
             f"PLAN: [3-step technical fix]\n"
         )
-        chat = self.client.chat.completions.create(
-            messages=[{"role": "user", "content": prompt}],
-            model="llama-3.3-70b-versatile"
-        )
-        return self._parse_response(chat.choices[0].message.content, request.workstation_id, "Groq Cloud")
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                f"{self.base_url}/api/generate", 
+                json={"model": "llama3", "prompt": prompt, "stream": False}, 
+                timeout=60.0
+            )
+            return self._parse_response(resp.json().get("response", ""), request.workstation_id, "Local Ollama")
 
     def _parse_response(self, text, ws_id, p_name):
         summary, severity, plan = "N/A", SeverityEnum.medium, "No plan"

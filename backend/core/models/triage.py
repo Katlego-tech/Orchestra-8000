@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field
-from enum import Enum
+from pydantic import BaseModel
 from typing import Optional
+from enum import Enum
 
 class SeverityEnum(str, Enum):
     low = "low"
@@ -9,12 +9,13 @@ class SeverityEnum(str, Enum):
     critical = "critical"
 
 class TriageRequest(BaseModel):
-    workstation_id: str = Field(..., example="WS-001")
-    issue_description: str = Field(..., example="System fan making grinding noise")
+    workstation_id: str
+    issue_description: str
+    provider: Optional[str] = "watsonx" # Default instrument
 
 class TriageResponse(BaseModel):
     workstation_id: str
     issue_summary: str
     severity: SeverityEnum
     provider_used: str
-    reasoning_plan: Optional[str] = None # For IBM Bob Agentic Logic
+    reasoning_plan: Optional[str] = None
