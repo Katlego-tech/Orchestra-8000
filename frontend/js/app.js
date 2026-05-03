@@ -18,7 +18,12 @@ const state = {
     currentFlow: 'planning',
     activeModel: 'ibm-bob',
     logs: [],
-    harmonicMinimized: false
+    chatOpen: false,
+    cpuInterval: null,
+    cpuValue: 42,
+    memValue: 78,
+    netValue: 35,
+    diskValue: 24
 };
 
 // ===== Initialization =====
@@ -29,9 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeFlowAnimation();
     initializeModelCards();
     initializeTerminal();
-    initializeHarmonic();
+    initializeBubble();
     initializeInteractions();
     startSystemSimulation();
+    startCPUMonitoring();
     initPageTransitions();
 });
 
@@ -45,44 +51,17 @@ function initializeNavigation() {
             
             const tabName = item.getAttribute('data-tab');
             
-            // Remove active class from all items
             navItems.forEach(nav => nav.classList.remove('active'));
-            
-            // Add active class to clicked item
             item.classList.add('active');
             
-            // Switch tabs
             switchTab(tabName);
             
-            // Add subtle feedback
             item.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 item.style.transform = '';
             }, 150);
         });
     });
-    
-    // Harmonic mobile toggle
-    const harmonicToggle = document.getElementById('harmonicToggle');
-    const harmonicPanel = document.querySelector('.harmonic-panel');
-    
-    if (harmonicToggle) {
-        harmonicToggle.addEventListener('click', () => {
-            harmonicPanel.classList.toggle('mobile-visible');
-        });
-        
-        // Show toggle on mobile
-        if (window.innerWidth <= 768) {
-            harmonicToggle.style.display = 'flex';
-        }
-        
-        window.addEventListener('resize', () => {
-            harmonicToggle.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
-            if (window.innerWidth > 768) {
-                harmonicPanel.classList.remove('mobile-visible');
-            }
-        });
-    }
 }
 
 // ===== Tab Switching =====
@@ -175,37 +154,26 @@ function animateFlowProgress() {
 
 // ===== Model Cards =====
 function initializeModelCards() {
-    const modelCards = document.querySelectorAll('.model-card');
+    const modelCards = document.querySelectorAll('.model-card[data-model]');
     
     modelCards.forEach(card => {
         card.addEventListener('click', () => {
-            // Remove active class from all cards
             modelCards.forEach(c => c.classList.remove('active'));
-            
-            // Add active class to clicked card
             card.classList.add('active');
             
-            // Update state
-            const modelName = card.querySelector('.model-name').textContent;
+            const modelName = card.querySelector('.model-card-name').textContent;
             state.activeModel = modelName.toLowerCase().replace(' ', '-');
             
-            // Add log entry
             addLogEntry('success', `Switched to model: ${modelName}`);
             
-            // Update Harmonic insight
-            updateHarmonicInsight(modelName);
-        });
-        
-        // Animate metrics on hover
-        card.addEventListener('mouseenter', () => {
-            const metrics = card.querySelectorAll('.metric-fill');
-            metrics.forEach(metric => {
-                const currentWidth = metric.style.width;
-                metric.style.width = '0%';
-                setTimeout(() => {
-                    metric.style.width = currentWidth;
-                }, 50);
-            });
+            const insights = {
+                'IBM Bob': { icon: 'Target', title: 'Enterprise Choice', text: 'Enterprise-grade reliability with comprehensive audit trails.' },
+                'Groq': { icon: 'Speed', title: 'Speed Optimized', text: 'Ultra-fast inference with 3x performance improvement.' },
+                'Ollama': { icon: 'Lock', title: 'Privacy First', text: 'Local execution with zero external dependencies.' }
+            };
+            
+            const insight = insights[modelName];
+            if (insight) addChatMessage(insight.icon, insight.title, insight.text);
         });
     });
 }
@@ -252,57 +220,86 @@ function addLogEntry(level, message) {
     state.logs.push({ timestamp, level, message });
 }
 
-// ===== Harmonic Assistant =====
-function initializeHarmonic() {
-    const minimizeButton = document.querySelector('.minimize-button');
-    const harmonicPanel = document.querySelector('.harmonic-panel');
-    const sendButton = document.querySelector('.send-button');
-    const textbox = document.querySelector('.harmonic-textbox');
+// ===== Floating Bubble =====
+function initializeBubble() {
+    const bubble = document.getElementById('harmonicBubble');
+    const chat = document.getElementById('harmonicChat');
+    const closeBtn = document.getElementById('chatClose');
+    const sendBtn = document.getElementById('chatSend');
+    const input = document.getElementById('chatInput');
     
-    // Minimize/Maximize
-    minimizeButton.addEventListener('click', () => {
-        state.harmonicMinimized = !state.harmonicMinimized;
-        
-        if (state.harmonicMinimized) {
-            harmonicPanel.classList.add('minimized');
+    if (!bubble || !chat) return;
+    
+    bubble.addEventListener('click', () => {
+        state.chatOpen = !state.chatOpen;
+        if (state.chatOpen) {
+            chat.classList.add('visible');
+            bubble.classList.add('hidden');
         } else {
-            harmonicPanel.classList.remove('minimized');
+            chat.classList.remove('visible');
+            bubble.classList.remove('hidden');
         }
     });
     
-    // Send message
-    sendButton.addEventListener('click', () => {
-        sendHarmonicMessage();
-    });
-    
-    textbox.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            sendHarmonicMessage();
-        }
-    });
-    
-    // Animate status text
-    animateHarmonicStatus();
-}
-
-function sendHarmonicMessage() {
-    const textbox = document.querySelector('.harmonic-textbox');
-    const message = textbox.value.trim();
-    
-    if (message) {
-        addLogEntry('info', `User query: ${message}`);
-        
-        // Simulate response
-        setTimeout(() => {
-            addLogEntry('success', 'Harmonic: Processing your request...');
-            addHarmonicInsight('💬', 'User Query', `Analyzing: "${message}"`);
-        }, 500);
-        
-        textbox.value = '';
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            state.chatOpen = false;
+            chat.classList.remove('visible');
+            bubble.classList.remove('hidden');
+        });
     }
+    
+    if (sendBtn && input) {
+        sendBtn.addEventListener('click', () => sendChatMessage(input, chat));
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendChatMessage(input, chat);
+        });
+    }
+    
+    animateChatStatus();
 }
 
-function animateHarmonicStatus() {
+function sendChatMessage(input, chat) {
+    const message = input.value.trim();
+    if (!message) return;
+    
+    const messages = document.getElementById('chatMessages');
+    const userMsg = document.createElement('div');
+    userMsg.className = 'chat-message user';
+    userMsg.innerHTML = `<p>${escapeHtml(message)}</p>`;
+    messages.appendChild(userMsg);
+    
+    input.value = '';
+    addLogEntry('info', `User query: ${message}`);
+    
+    setTimeout(() => {
+        const responses = [
+            `I've analyzed your request about "${message.slice(0, 30)}...". All providers are operational.`,
+            `Processing your query. Current system ROI: 3.4x with 98% success rate.`,
+            `Based on current orchestration data, I recommend proceeding with IBM Bob for this task.`,
+            `Your request is being routed through the optimal provider. ETA: <200ms.`
+        ];
+        const response = responses[Math.floor(Math.random() * responses.length)];
+        
+        const harmonicMsg = document.createElement('div');
+        harmonicMsg.className = 'chat-message harmonic';
+        harmonicMsg.innerHTML = `<p>${response}</p>`;
+        messages.appendChild(harmonicMsg);
+        messages.scrollTop = messages.scrollHeight;
+        
+        addLogEntry('success', 'Harmonic: Response delivered');
+    }, 800);
+    
+    messages.scrollTop = messages.scrollHeight;
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function animateChatStatus() {
     const statusTexts = [
         'Analyzing system state...',
         'Monitoring orchestration flow...',
@@ -311,11 +308,12 @@ function animateHarmonicStatus() {
     ];
     
     let currentIndex = 0;
-    const statusElement = document.querySelector('.harmonic-status');
+    const statusElement = document.getElementById('chatStatus');
+    
+    if (!statusElement) return;
     
     setInterval(() => {
         statusElement.style.opacity = '0';
-        
         setTimeout(() => {
             statusElement.textContent = statusTexts[currentIndex];
             statusElement.style.opacity = '1';
@@ -324,60 +322,18 @@ function animateHarmonicStatus() {
     }, 5000);
 }
 
-function updateHarmonicInsight(modelName) {
-    const insights = {
-        'IBM Bob': {
-            icon: '🎯',
-            title: 'Enterprise Choice',
-            text: 'IBM Bob provides enterprise-grade reliability with comprehensive audit trails and compliance features.'
-        },
-        'Groq': {
-            icon: '⚡',
-            title: 'Speed Optimized',
-            text: 'Groq delivers ultra-fast inference with 3x performance improvement for time-critical operations.'
-        },
-        'Ollama': {
-            icon: '🔒',
-            title: 'Privacy First',
-            text: 'Ollama runs locally with zero external dependencies, ensuring maximum data privacy and control.'
-        }
-    };
+function addChatMessage(icon, title, text) {
+    const messages = document.getElementById('chatMessages');
+    if (!messages) return;
     
-    const insight = insights[modelName];
-    if (insight) {
-        addHarmonicInsight(insight.icon, insight.title, insight.text);
-    }
-}
-
-function addHarmonicInsight(icon, title, text) {
-    const harmonicContent = document.querySelector('.harmonic-content');
+    const msg = document.createElement('div');
+    msg.className = 'chat-message harmonic';
+    msg.innerHTML = `<p><strong>${title}:</strong> ${text}</p>`;
+    messages.insertBefore(msg, messages.firstChild);
     
-    const insightCard = document.createElement('div');
-    insightCard.className = 'insight-card';
-    insightCard.style.opacity = '0';
-    insightCard.style.transform = 'translateX(20px)';
-    
-    insightCard.innerHTML = `
-        <div class="insight-icon">${icon}</div>
-        <div class="insight-text">
-            <h4>${title}</h4>
-            <p>${text}</p>
-        </div>
-    `;
-    
-    harmonicContent.insertBefore(insightCard, harmonicContent.firstChild);
-    
-    // Animate in
-    setTimeout(() => {
-        insightCard.style.transition = 'all 0.3s ease';
-        insightCard.style.opacity = '1';
-        insightCard.style.transform = '';
-    }, 50);
-    
-    // Keep only last 5 insights
-    const insights = harmonicContent.querySelectorAll('.insight-card');
-    if (insights.length > 5) {
-        insights[insights.length - 1].remove();
+    const items = messages.querySelectorAll('.chat-message');
+    if (items.length > 10) {
+        items[items.length - 1].remove();
     }
 }
 
@@ -387,8 +343,8 @@ function initializeInteractions() {
     const approveButton = document.querySelector('.approve-button');
     if (approveButton) {
         approveButton.addEventListener('click', () => {
-            approveButton.textContent = 'Approved ✓';
-            approveButton.style.background = 'var(--success)';
+        approveButton.textContent = 'Approved';
+        approveButton.style.background = 'var(--success)';
             approveButton.disabled = true;
             
             addLogEntry('success', 'Human approval granted - proceeding with execution');
@@ -457,7 +413,6 @@ function initializeInteractions() {
 
 // ===== System Simulation =====
 function startSystemSimulation() {
-    // Simulate periodic system updates
     setInterval(() => {
         const events = [
             { level: 'info', message: 'Health check: All systems operational' },
@@ -468,26 +423,74 @@ function startSystemSimulation() {
         
         const randomEvent = events[Math.floor(Math.random() * events.length)];
         
-        // Only add if not too many recent logs
         if (state.logs.length < 15) {
             addLogEntry(randomEvent.level, randomEvent.message);
         }
     }, 15000);
     
-    // Simulate Harmonic insights
     setInterval(() => {
         const insights = [
-            { icon: '📊', title: 'Performance Insight', text: 'Average response time: 1.2s - within optimal range' },
-            { icon: '💰', title: 'Cost Analysis', text: 'Current configuration saves 23% compared to baseline' },
-            { icon: '🔄', title: 'System Update', text: 'New model version available for testing' }
+            { icon: 'Chart', title: 'Performance Insight', text: 'Average response time: 1.2s - within optimal range' },
+            { icon: 'Cost', title: 'Cost Analysis', text: 'Current configuration saves 23% compared to baseline' },
+            { icon: 'Update', title: 'System Update', text: 'New model version available for testing' }
         ];
         
         const randomInsight = insights[Math.floor(Math.random() * insights.length)];
         
-        if (Math.random() > 0.7) { // 30% chance
-            addHarmonicInsight(randomInsight.icon, randomInsight.title, randomInsight.text);
+        if (Math.random() > 0.7) {
+            addChatMessage(randomInsight.icon, randomInsight.title, randomInsight.text);
         }
     }, 20000);
+}
+
+// ===== CPU Monitoring =====
+function startCPUMonitoring() {
+    const cpuBar = document.getElementById('cpuBar');
+    const cpuValue = document.getElementById('cpuValue');
+    const memBar = document.getElementById('memBar');
+    const memValue = document.getElementById('memValue');
+    const netBar = document.getElementById('netBar');
+    const netValue = document.getElementById('netValue');
+    const diskBar = document.getElementById('diskBar');
+    const diskValue = document.getElementById('diskValue');
+    
+    state.cpuInterval = setInterval(() => {
+        state.cpuValue = clamp(state.cpuValue + randomInt(-8, 8), 15, 95);
+        state.memValue = clamp(state.memValue + randomInt(-5, 5), 50, 92);
+        state.netValue = clamp(state.netValue + randomInt(-10, 10), 10, 80);
+        state.diskValue = clamp(state.diskValue + randomInt(-3, 3), 15, 60);
+        
+        if (cpuBar) cpuBar.style.width = `${state.cpuValue}%`;
+        if (cpuValue) cpuValue.textContent = `${state.cpuValue}%`;
+        updateBarState(cpuBar, state.cpuValue);
+        
+        if (memBar) memBar.style.width = `${state.memValue}%`;
+        if (memValue) memValue.textContent = `${(state.memValue / 100 * 8).toFixed(1)} GB`;
+        updateBarState(memBar, state.memValue);
+        
+        if (netBar) netBar.style.width = `${state.netValue}%`;
+        if (netValue) netValue.textContent = `${(state.netValue / 100 * 4).toFixed(1)} MB/s`;
+        updateBarState(netBar, state.netValue);
+        
+        if (diskBar) diskBar.style.width = `${state.diskValue}%`;
+        if (diskValue) diskValue.textContent = `${Math.floor(state.diskValue / 100 * 500)} MB/s`;
+        updateBarState(diskBar, state.diskValue);
+    }, 2000);
+}
+
+function updateBarState(bar, value) {
+    if (!bar) return;
+    bar.classList.remove('warning', 'critical');
+    if (value > 80) bar.classList.add('critical');
+    else if (value > 60) bar.classList.add('warning');
+}
+
+function clamp(val, min, max) {
+    return Math.min(Math.max(val, min), max);
+}
+
+function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // ===== Utility Functions =====
@@ -542,8 +545,7 @@ window.addEventListener('load', () => {
 window.Orchestra = {
     state,
     addLogEntry,
-    addHarmonicInsight,
-    updateHarmonicInsight
+    addChatMessage
 };
 
 console.log('%c🎼 Orchestra 8000 Initialized', 'color: #0F62FE; font-size: 16px; font-weight: bold;');
@@ -631,9 +633,8 @@ async function handleTriageSubmit() {
         addLogEntry('info', `Severity: ${formatted.severity}`);
         
         // Update Harmonic with insight
-        const severityIcon = window.OrchestraAPI.getSeverityIcon(formatted.severity);
-        addHarmonicInsight(
-            severityIcon,
+        addChatMessage(
+            'Triage',
             'Triage Complete',
             `${workstationId}: ${formatted.severity} severity issue identified`
         );
@@ -693,7 +694,7 @@ function displayTriageResult(result) {
 function showTriageError(message) {
     const resultDiv = document.getElementById('triageResult');
     resultDiv.innerHTML = `
-        <h3 style="color: var(--error);">⚠️ Error</h3>
+        <h3 style="color: var(--error);">Error</h3>
         <div class="result-value" style="color: var(--error);">${message}</div>
     `;
     resultDiv.style.display = 'block';
@@ -705,10 +706,10 @@ async function checkBackendHealth() {
         const isHealthy = await window.OrchestraAPI.healthCheck();
         if (isHealthy) {
             addLogEntry('success', 'Backend API connection established');
-            addHarmonicInsight('✅', 'System Status', 'Backend API is online and ready');
+            addChatMessage('Online', 'System Status', 'Backend API is online and ready');
         } else {
             addLogEntry('warning', 'Backend API not responding - using demo mode');
-            addHarmonicInsight('⚠️', 'System Status', 'Backend API offline - start server with: cd backend && uv run uvicorn main:app');
+            addChatMessage('Offline', 'System Status', 'Backend API offline - start server with: cd backend && uv run uvicorn main:app');
         }
     } catch (error) {
         addLogEntry('warning', 'Backend API check failed - using demo mode');

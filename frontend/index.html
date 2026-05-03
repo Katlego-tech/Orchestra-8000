@@ -10,10 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Left Sidebar Navigation -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <a href="hero.html" class="logo" style="text-decoration: none; color: inherit;">
+            <a href="hero.html" class="logo">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
                     <circle cx="16" cy="16" r="14" stroke="#0F62FE" stroke-width="2"/>
                     <path d="M16 8 L16 24 M10 16 L22 16" stroke="#0F62FE" stroke-width="2" stroke-linecap="round"/>
@@ -21,7 +20,6 @@
                 <span class="logo-text">Orchestra</span>
             </a>
         </div>
-        
         <nav class="sidebar-nav">
             <a href="#" class="nav-item active" data-tab="dashboard" data-tooltip="Dashboard">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -59,111 +57,241 @@
                 </svg>
             </a>
         </nav>
-        
         <div class="sidebar-footer">
-            <a href="#" class="nav-item" data-tooltip="Help">
+            <a href="hero.html" class="nav-item" data-tooltip="Logout">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </a>
         </div>
     </aside>
 
-    <!-- Main Content Area -->
     <main class="main-content">
-        <!-- Top Bar -->
         <header class="top-bar">
             <div class="page-title-section">
-                <button class="icon-button harmonic-toggle" id="harmonicToggle" style="display: none;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="3" fill="currentColor"/>
-                        <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </button>
                 <h1 class="page-title" id="pageTitle">Dashboard</h1>
                 <div class="status-indicator">
                     <div class="status-dot"></div>
                     <span class="status-text">All agents operational</span>
                 </div>
             </div>
-            
             <div class="top-bar-actions">
-                <button class="icon-button">
+                <button class="icon-button" id="notificationBtn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                     </svg>
+                    <span class="notification-badge">3</span>
                 </button>
                 <div class="user-profile">
-                    <div class="avatar">G</div>
-                    <span class="user-name">Guest User</span>
+                    <div class="avatar" id="userAvatar">D</div>
+                    <span class="user-name" id="userName">Demo User</span>
                 </div>
             </div>
         </header>
 
-        <!-- Tab Content Container -->
         <div class="tab-content-container">
-            <!-- Dashboard Tab -->
+            <!-- ===== DASHBOARD TAB ===== -->
             <div id="dashboardTab" class="tab-pane active">
-                <div class="dashboard-overview">
-                    <!-- Stats Cards -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon">🎯</div>
-                            <div class="stat-content">
-                                <h3 class="stat-value">24</h3>
-                                <p class="stat-label">Active Tasks</p>
-                            </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                                <rect x="9" y="3" width="6" height="4" rx="1"/>
+                            </svg>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">⚡</div>
-                            <div class="stat-content">
-                                <h3 class="stat-value">98%</h3>
-                                <p class="stat-label">Success Rate</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">🤖</div>
-                            <div class="stat-content">
-                                <h3 class="stat-value">3</h3>
-                                <p class="stat-label">Models Active</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">⏱️</div>
-                            <div class="stat-content">
-                                <h3 class="stat-value">1.2s</h3>
-                                <p class="stat-label">Avg Response</p>
-                            </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" id="statActiveTasks">24</h3>
+                            <p class="stat-label">Active Tasks</p>
                         </div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" id="statSuccessRate">98%</h3>
+                            <p class="stat-label">Success Rate</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                                <circle cx="12" cy="10" r="2"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" id="statModelsActive">3</h3>
+                            <p class="stat-label">Models Active</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <h3 class="stat-value" id="statAvgResponse">1.2s</h3>
+                            <p class="stat-label">Avg Response</p>
+                        </div>
+                    </div>
+                </div>
 
-                    <!-- Recent Activity -->
+                <div class="dashboard-grid">
                     <section class="panel activity-panel">
                         <div class="panel-header">
                             <h2 class="panel-title">Recent Activity</h2>
                         </div>
                         <div class="panel-content">
-                            <div class="activity-list">
+                            <div class="activity-list" id="activityList">
                                 <div class="activity-item">
-                                    <div class="activity-icon success">✓</div>
+                                    <div class="activity-icon success">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="20 6 9 17 4 12"/>
+                                        </svg>
+                                    </div>
                                     <div class="activity-details">
-                                        <p class="activity-title">Task completed successfully</p>
-                                        <p class="activity-time">2 minutes ago</p>
+                                        <p class="activity-title">Triage completed for WS-042</p>
+                                        <p class="activity-time">1 minute ago</p>
                                     </div>
                                 </div>
                                 <div class="activity-item">
-                                    <div class="activity-icon info">ℹ</div>
+                                    <div class="activity-icon info">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <line x1="12" y1="16" x2="12" y2="12"/>
+                                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                        </svg>
+                                    </div>
                                     <div class="activity-details">
-                                        <p class="activity-title">Model switched to IBM Bob</p>
-                                        <p class="activity-time">5 minutes ago</p>
+                                        <p class="activity-title">Model switched to IBM Bob (watsonx.ai)</p>
+                                        <p class="activity-time">3 minutes ago</p>
                                     </div>
                                 </div>
                                 <div class="activity-item">
-                                    <div class="activity-icon warning">⚠</div>
+                                    <div class="activity-icon warning">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                            <line x1="12" y1="9" x2="12" y2="13"/>
+                                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                        </svg>
+                                    </div>
                                     <div class="activity-details">
-                                        <p class="activity-title">Human approval required</p>
-                                        <p class="activity-time">8 minutes ago</p>
+                                        <p class="activity-title">Human approval checkpoint triggered</p>
+                                        <p class="activity-time">7 minutes ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="panel quick-orchestration">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                Provider Status
+                            </h2>
+                        </div>
+                        <div class="panel-content">
+                            <div class="provider-list">
+                                <div class="provider-item healthy">
+                                    <span class="provider-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="2" y="3" width="20" height="14" rx="2"/>
+                                            <line x1="8" y1="21" x2="16" y2="21"/>
+                                            <line x1="12" y1="17" x2="12" y2="21"/>
+                                        </svg>
+                                    </span>
+                                    <div class="provider-info">
+                                        <p class="provider-name">IBM Bob (watsonx.ai)</p>
+                                        <p class="provider-detail">Granite 4.0 · 145ms avg</p>
+                                    </div>
+                                    <span class="provider-status">Healthy</span>
+                                </div>
+                                <div class="provider-item healthy">
+                                    <span class="provider-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                                        </svg>
+                                    </span>
+                                    <div class="provider-info">
+                                        <p class="provider-name">Groq</p>
+                                        <p class="provider-detail">Llama 3.3 70B · 42ms avg</p>
+                                    </div>
+                                    <span class="provider-status">Healthy</span>
+                                </div>
+                                <div class="provider-item healthy">
+                                    <span class="provider-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                        </svg>
+                                    </span>
+                                    <div class="provider-info">
+                                        <p class="provider-name">Ollama</p>
+                                        <p class="provider-detail">Local · 320ms avg</p>
+                                    </div>
+                                    <span class="provider-status">Healthy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="panel mcp-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                                </svg>
+                                MCP - Tribal Knowledge
+                            </h2>
+                        </div>
+                        <div class="panel-content">
+                            <div class="mcp-sources">
+                                <div class="mcp-source">
+                                    <span class="mcp-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                                        </svg>
+                                    </span>
+                                    <div class="mcp-info">
+                                        <p class="mcp-name">Knowledge Base</p>
+                                        <p class="mcp-detail">2,847 docs indexed</p>
+                                    </div>
+                                </div>
+                                <div class="mcp-source">
+                                    <span class="mcp-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                                        </svg>
+                                    </span>
+                                    <div class="mcp-info">
+                                        <p class="mcp-name">Runbooks</p>
+                                        <p class="mcp-detail">156 workflows</p>
+                                    </div>
+                                </div>
+                                <div class="mcp-source">
+                                    <span class="mcp-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <line x1="18" y1="20" x2="18" y2="10"/>
+                                            <line x1="12" y1="20" x2="12" y2="4"/>
+                                            <line x1="6" y1="20" x2="6" y2="14"/>
+                                        </svg>
+                                    </span>
+                                    <div class="mcp-info">
+                                        <p class="mcp-name">Incident History</p>
+                                        <p class="mcp-detail">4,203 resolved</p>
                                     </div>
                                 </div>
                             </div>
@@ -172,483 +300,680 @@
                 </div>
             </div>
 
-            <!-- Orchestration Tab -->
+            <!-- ===== ORCHESTRATION TAB ===== -->
             <div id="orchestrationTab" class="tab-pane">
-                <section class="panel plan-panel">
-                    <div class="panel-header">
-                        <h2 class="panel-title">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" stroke="currentColor" stroke-width="2"/>
-                            </svg>
-                            Plan Mode
-                        </h2>
-                        <button class="expand-button">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="panel-content">
-                        <div class="reasoning-tree">
-                            <div class="tree-node expanded">
-                                <div class="node-header">
-                                    <span class="node-icon">📋</span>
-                                    <span class="node-label">Task Analysis</span>
-                                    <span class="node-status completed">✓</span>
-                                </div>
-                                <div class="node-children">
-                                    <div class="tree-node expanded">
-                                        <div class="node-header">
-                                            <span class="node-icon">🔍</span>
-                                            <span class="node-label">Requirements Extraction</span>
-                                            <span class="node-status completed">✓</span>
-                                        </div>
+                <div class="orchestration-grid">
+                    <section class="panel plan-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                Plan Mode
+                            </h2>
+                        </div>
+                        <div class="panel-content">
+                            <div class="reasoning-tree">
+                                <div class="tree-node expanded">
+                                    <div class="node-header">
+                                        <span class="node-icon">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                                <polyline points="14 2 14 8 20 8"/>
+                                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                                <polyline points="10 9 9 9 8 9"/>
+                                            </svg>
+                                        </span>
+                                        <span class="node-label">Task Analysis</span>
+                                        <span class="node-status completed">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="20 6 9 17 4 12"/>
+                                            </svg>
+                                        </span>
                                     </div>
-                                    <div class="tree-node active">
-                                        <div class="node-header">
-                                            <span class="node-icon">🎯</span>
-                                            <span class="node-label">Strategy Selection</span>
-                                            <span class="node-status pending">⟳</span>
+                                    <div class="node-children">
+                                        <div class="tree-node expanded">
+                                            <div class="node-header">
+                                                <span class="node-icon">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                        <circle cx="11" cy="11" r="8"/>
+                                                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                                    </svg>
+                                                </span>
+                                                <span class="node-label">Requirements Extraction</span>
+                                                <span class="node-status completed">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                        <polyline points="20 6 9 17 4 12"/>
+                                                    </svg>
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div class="node-children">
-                                            <div class="tree-node">
-                                                <div class="node-header">
-                                                    <span class="node-icon">⚡</span>
-                                                    <span class="node-label">Model Routing</span>
-                                                    <span class="node-status pending">○</span>
+                                        <div class="tree-node active">
+                                            <div class="node-header">
+                                                <span class="node-icon">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                        <circle cx="12" cy="12" r="10"/>
+                                                        <circle cx="12" cy="12" r="6"/>
+                                                        <circle cx="12" cy="12" r="2"/>
+                                                    </svg>
+                                                </span>
+                                                <span class="node-label">Strategy Selection</span>
+                                                <span class="node-status pending">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                                                        <line x1="12" y1="2" x2="12" y2="6"/>
+                                                        <line x1="12" y1="18" x2="12" y2="22"/>
+                                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
+                                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
+                                                        <line x1="2" y1="12" x2="6" y2="12"/>
+                                                        <line x1="18" y1="12" x2="22" y2="12"/>
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                            <div class="node-children">
+                                                <div class="tree-node">
+                                                    <div class="node-header">
+                                                        <span class="node-icon">
+                                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                                                            </svg>
+                                                        </span>
+                                                        <span class="node-label">Model Routing</span>
+                                                        <span class="node-status pending">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                                                <circle cx="12" cy="12" r="10"/>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="tree-node checkpoint">
-                                        <div class="node-header">
-                                            <span class="node-icon">✋</span>
-                                            <span class="node-label">Human Approval Required</span>
-                                            <button class="approve-button">Approve</button>
+                                        <div class="tree-node checkpoint">
+                                            <div class="node-header">
+                                                <span class="node-icon">
+                                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                                                    </svg>
+                                                </span>
+                                                <span class="node-label">Human Approval</span>
+                                                <button class="approve-button" id="approveBtn">Approve</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                <section class="panel orchestration-panel">
-                    <div class="panel-header">
-                        <h2 class="panel-title">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                                <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            Orchestration Flow
-                        </h2>
-                        <div class="flow-controls">
-                            <button class="control-button">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                    <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/>
+                    <section class="panel orchestration-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                                 </svg>
-                            </button>
-                            <button class="control-button">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                    <rect x="6" y="4" width="4" height="16" fill="currentColor"/>
-                                    <rect x="14" y="4" width="4" height="16" fill="currentColor"/>
-                                </svg>
-                            </button>
+                                Orchestration Flow
+                            </h2>
+                            <div class="flow-controls">
+                                <button class="control-button" id="flowPlay">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                                <button class="control-button" id="flowPause">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                        <rect x="6" y="4" width="4" height="16" fill="currentColor"/>
+                                        <rect x="14" y="4" width="4" height="16" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="panel-content">
-                        <div class="flow-canvas">
-                            <svg class="flow-connections" width="100%" height="100%">
-                                <defs>
-                                    <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                        <stop offset="0%" style="stop-color:#0F62FE;stop-opacity:1" />
-                                        <stop offset="100%" style="stop-color:#FFD600;stop-opacity:1" />
-                                    </linearGradient>
-                                    <filter id="glow">
-                                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                                        <feMerge>
-                                            <feMergeNode in="coloredBlur"/>
-                                            <feMergeNode in="SourceGraphic"/>
-                                        </feMerge>
-                                    </filter>
-                                </defs>
-                                <path class="flow-line active" d="M 120 80 L 280 80" stroke="url(#flowGradient)" stroke-width="3" fill="none" filter="url(#glow)"/>
-                                <path class="flow-line active" d="M 440 80 L 600 80" stroke="url(#flowGradient)" stroke-width="3" fill="none" filter="url(#glow)"/>
-                            </svg>
-                            <div class="flow-nodes">
-                                <div class="flow-node completed" style="left: 20px;">
-                                    <div class="node-icon-wrapper">
-                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                                            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="currentColor" stroke-width="2"/>
-                                            <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                        </svg>
+                        <div class="panel-content">
+                            <div class="flow-canvas">
+                                <div class="flow-nodes">
+                                    <div class="flow-node completed">
+                                        <div class="node-icon-wrapper">
+                                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="currentColor" stroke-width="2"/>
+                                                <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                        </div>
+                                        <span class="node-label">Task</span>
                                     </div>
-                                    <span class="node-label">Task</span>
-                                    <div class="node-status-badge">✓</div>
-                                </div>
-                                <div class="flow-node active" style="left: 180px;">
-                                    <div class="node-icon-wrapper">
-                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
+                                    <div class="flow-line"></div>
+                                    <div class="flow-node active">
+                                        <div class="node-icon-wrapper">
+                                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2"/>
+                                            </svg>
+                                        </div>
+                                        <span class="node-label">Plan</span>
+                                        <div class="node-pulse"></div>
                                     </div>
-                                    <span class="node-label">Plan</span>
-                                    <div class="node-pulse"></div>
-                                </div>
-                                <div class="flow-node" style="left: 340px;">
-                                    <div class="node-icon-wrapper">
-                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
+                                    <div class="flow-line"></div>
+                                    <div class="flow-node">
+                                        <div class="node-icon-wrapper">
+                                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="currentColor" stroke-width="2"/>
+                                            </svg>
+                                        </div>
+                                        <span class="node-label">Route</span>
                                     </div>
-                                    <span class="node-label">Execution</span>
-                                </div>
-                                <div class="flow-node" style="left: 500px;">
-                                    <div class="node-icon-wrapper">
-                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
+                                    <div class="flow-line"></div>
+                                    <div class="flow-node">
+                                        <div class="node-icon-wrapper">
+                                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="currentColor" stroke-width="2"/>
+                                            </svg>
+                                        </div>
+                                        <span class="node-label">Execute</span>
                                     </div>
-                                    <span class="node-label">Validation</span>
+                                    <div class="flow-line"></div>
+                                    <div class="flow-node">
+                                        <div class="node-icon-wrapper">
+                                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2"/>
+                                                <polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" stroke-width="2"/>
+                                            </svg>
+                                        </div>
+                                        <span class="node-label">Validate</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                <section class="panel trace-panel">
-                    <div class="panel-header">
-                        <h2 class="panel-title">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <polyline points="4 17 10 11 4 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <line x1="12" y1="19" x2="20" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            BobShell - Execution Trace
-                        </h2>
-                        <div class="trace-controls">
-                            <button class="trace-button">Clear</button>
-                            <button class="trace-button">Export</button>
-                        </div>
-                    </div>
-                    <div class="panel-content">
-                        <div class="terminal">
-                            <div class="terminal-line">
-                                <span class="timestamp">[23:36:12]</span>
-                                <span class="log-level info">INFO</span>
-                                <span class="log-message">Orchestration session initialized</span>
-                            </div>
-                            <div class="terminal-line">
-                                <span class="timestamp">[23:36:13]</span>
-                                <span class="log-level success">SUCCESS</span>
-                                <span class="log-message">Task analysis completed - 3 steps identified</span>
-                            </div>
-                            <div class="terminal-line">
-                                <span class="timestamp">[23:36:14]</span>
-                                <span class="log-level info">INFO</span>
-                                <span class="log-message">Routing to IBM Bob (watsonx.ai) - confidence: 0.94</span>
-                            </div>
-                            <div class="terminal-line active">
-                                <span class="timestamp">[23:36:15]</span>
-                                <span class="log-level warning">PENDING</span>
-                                <span class="log-message">Awaiting human approval for strategy execution...</span>
-                                <span class="cursor-blink">_</span>
+                    <section class="panel trace-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <polyline points="4 17 10 11 4 5" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="12" y1="19" x2="20" y2="19" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                BobShell - Execution Trace
+                            </h2>
+                            <div class="trace-controls">
+                                <button class="trace-button" id="clearTerminal">Clear</button>
+                                <button class="trace-button" id="exportTerminal">Export</button>
                             </div>
                         </div>
-                    </div>
-                </section>
+                        <div class="panel-content">
+                            <div class="terminal" id="terminal"></div>
+                        </div>
+                    </section>
+                </div>
             </div>
 
-            <!-- Models Tab -->
+            <!-- ===== MODELS TAB ===== -->
             <div id="modelsTab" class="tab-pane">
-                <section class="panel model-panel full-width">
-                    <div class="panel-header">
-                        <h2 class="panel-title">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            AI Model Management
-                        </h2>
-                    </div>
-                    <div class="panel-content">
-                        <div class="model-list">
-                            <div class="model-card active">
-                                <div class="model-header">
-                                    <div class="model-icon">🤖</div>
-                                    <div class="model-info">
-                                        <h3 class="model-name">IBM Bob</h3>
-                                        <span class="model-type">watsonx.ai</span>
+                <div class="models-grid">
+                    <section class="panel system-monitoring">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                System Monitoring
+                            </h2>
+                            <span class="monitor-live">● Live</span>
+                        </div>
+                        <div class="panel-content">
+                            <div class="monitor-grid">
+                                <div class="monitor-card">
+                                    <div class="monitor-header">
+                                        <span class="monitor-label">CPU Usage</span>
+                                        <span class="monitor-value" id="cpuValue">42%</span>
                                     </div>
-                                    <div class="model-status active-badge">Active</div>
+                                    <div class="monitor-bar">
+                                        <div class="monitor-fill" id="cpuBar" style="width: 42%;"></div>
+                                    </div>
+                                    <div class="monitor-detail">4 cores · 3.2 GHz</div>
                                 </div>
-                                <div class="model-metrics">
-                                    <div class="metric">
-                                        <span class="metric-label">Cost</span>
-                                        <div class="metric-bar">
-                                            <div class="metric-fill" style="width: 45%; background: #0F62FE;"></div>
-                                        </div>
-                                        <span class="metric-value">$$</span>
+                                <div class="monitor-card">
+                                    <div class="monitor-header">
+                                        <span class="monitor-label">Memory</span>
+                                        <span class="monitor-value" id="memValue">6.2 GB</span>
                                     </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Speed</span>
-                                        <div class="metric-bar">
-                                            <div class="metric-fill" style="width: 85%; background: #FFD600;"></div>
-                                        </div>
-                                        <span class="metric-value">Fast</span>
+                                    <div class="monitor-bar">
+                                        <div class="monitor-fill" id="memBar" style="width: 78%;"></div>
                                     </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Trust</span>
-                                        <div class="metric-bar">
-                                            <div class="metric-fill" style="width: 95%; background: #24A148;"></div>
-                                        </div>
-                                        <span class="metric-value">High</span>
-                                    </div>
+                                    <div class="monitor-detail">8 GB total</div>
                                 </div>
-                            </div>
-
-                            <div class="model-card">
-                                <div class="model-header">
-                                    <div class="model-icon">⚡</div>
-                                    <div class="model-info">
-                                        <h3 class="model-name">Groq</h3>
-                                        <span class="model-type">LLaMA 3.1</span>
+                                <div class="monitor-card">
+                                    <div class="monitor-header">
+                                        <span class="monitor-label">Network I/O</span>
+                                        <span class="monitor-value" id="netValue">1.4 MB/s</span>
                                     </div>
+                                    <div class="monitor-bar">
+                                        <div class="monitor-fill" id="netBar" style="width: 35%;"></div>
+                                    </div>
+                                    <div class="monitor-detail">↑ 820 KB/s · ↓ 580 KB/s</div>
                                 </div>
-                                <div class="model-metrics">
-                                    <div class="metric">
-                                        <span class="metric-label">Cost</span>
-                                        <div class="metric-bar">
-                                            <div class="metric-fill" style="width: 25%; background: #0F62FE;"></div>
-                                        </div>
-                                        <span class="metric-value">$</span>
+                                <div class="monitor-card">
+                                    <div class="monitor-header">
+                                        <span class="monitor-label">Disk I/O</span>
+                                        <span class="monitor-value" id="diskValue">120 MB/s</span>
                                     </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Speed</span>
-                                        <div class="metric-bar">
-                                            <div class="metric-fill" style="width: 98%; background: #FFD600;"></div>
-                                        </div>
-                                        <span class="metric-value">Ultra</span>
+                                    <div class="monitor-bar">
+                                        <div class="monitor-fill" id="diskBar" style="width: 24%;"></div>
                                     </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Trust</span>
-                                        <div class="metric-bar">
-                                            <div class="metric-fill" style="width: 75%; background: #24A148;"></div>
-                                        </div>
-                                        <span class="metric-value">Good</span>
-                                    </div>
+                                    <div class="monitor-detail">SSD · 256 GB used</div>
                                 </div>
                             </div>
+                        </div>
+                    </section>
 
-                            <div class="model-card">
-                                <div class="model-header">
-                                    <div class="model-icon">🦙</div>
-                                    <div class="model-info">
-                                        <h3 class="model-name">Ollama</h3>
-                                        <span class="model-type">Local</span>
+                    <section class="panel model-routing-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                Provider Orchestration
+                            </h2>
+                        </div>
+                        <div class="panel-content">
+                            <div class="model-cards-grid">
+                                <div class="model-card" data-model="watsonx">
+                                    <div class="model-card-header">
+                                        <span class="model-card-icon">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                                <line x1="12" y1="17" x2="12" y2="21"/>
+                                            </svg>
+                                        </span>
+                                        <div class="model-card-info">
+                                            <h3 class="model-card-name">IBM Bob</h3>
+                                            <span class="model-card-type">watsonx.ai · Granite 4.0</span>
+                                        </div>
+                                        <span class="model-card-badge active">Active</span>
+                                    </div>
+                                    <div class="model-card-metrics">
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Cost</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 45%"></div></div>
+                                            <span class="model-metric-value">$$</span>
+                                        </div>
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Speed</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 85%"></div></div>
+                                            <span class="model-metric-value">145ms</span>
+                                        </div>
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Trust</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 95%"></div></div>
+                                            <span class="model-metric-value">High</span>
+                                        </div>
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Uptime</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 99.9%"></div></div>
+                                            <span class="model-metric-value">99.9%</span>
+                                        </div>
+                                    </div>
+                                    <div class="model-card-footer">
+                                        <span class="model-card-requests">1,247 requests today</span>
+                                        <span class="model-card-latency">p99: 280ms</span>
                                     </div>
                                 </div>
-                                <div class="model-metrics">
-                                    <div class="metric">
-                                        <span class="metric-label">Cost</span>
-                                        <div class="metric-bar">
-                                            <div class="metric-fill" style="width: 5%; background: #0F62FE;"></div>
+
+                                <div class="model-card" data-model="groq">
+                                    <div class="model-card-header">
+                                        <span class="model-card-icon">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                                            </svg>
+                                        </span>
+                                        <div class="model-card-info">
+                                            <h3 class="model-card-name">Groq</h3>
+                                            <span class="model-card-type">LPU · Llama 3.3 70B</span>
                                         </div>
-                                        <span class="metric-value">Free</span>
                                     </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Speed</span>
-                                        <div class="metric-bar">
-                                            <div class="metric-fill" style="width: 60%; background: #FFD600;"></div>
+                                    <div class="model-card-metrics">
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Cost</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 25%"></div></div>
+                                            <span class="model-metric-value">$</span>
                                         </div>
-                                        <span class="metric-value">Med</span>
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Speed</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 98%"></div></div>
+                                            <span class="model-metric-value">42ms</span>
+                                        </div>
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Trust</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 75%"></div></div>
+                                            <span class="model-metric-value">Good</span>
+                                        </div>
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Uptime</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 99.7%"></div></div>
+                                            <span class="model-metric-value">99.7%</span>
+                                        </div>
                                     </div>
-                                    <div class="metric">
-                                        <span class="metric-label">Trust</span>
-                                        <div class="metric-bar">
-                                            <div class="metric-fill" style="width: 100%; background: #24A148;"></div>
+                                    <div class="model-card-footer">
+                                        <span class="model-card-requests">892 requests today</span>
+                                        <span class="model-card-latency">p99: 95ms</span>
+                                    </div>
+                                </div>
+
+                                <div class="model-card" data-model="ollama">
+                                    <div class="model-card-header">
+                                        <span class="model-card-icon">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                            </svg>
+                                        </span>
+                                        <div class="model-card-info">
+                                            <h3 class="model-card-name">Ollama</h3>
+                                            <span class="model-card-type">Local · Llama 3.1 8B</span>
                                         </div>
-                                        <span class="metric-value">Max</span>
+                                    </div>
+                                    <div class="model-card-metrics">
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Cost</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 5%"></div></div>
+                                            <span class="model-metric-value">Free</span>
+                                        </div>
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Speed</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 60%"></div></div>
+                                            <span class="model-metric-value">320ms</span>
+                                        </div>
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Trust</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 100%"></div></div>
+                                            <span class="model-metric-value">Max</span>
+                                        </div>
+                                        <div class="model-metric">
+                                            <span class="model-metric-label">Uptime</span>
+                                            <div class="model-metric-bar"><div class="model-metric-fill" style="width: 100%"></div></div>
+                                            <span class="model-metric-value">100%</span>
+                                        </div>
+                                    </div>
+                                    <div class="model-card-footer">
+                                        <span class="model-card-requests">438 requests today</span>
+                                        <span class="model-card-latency">p99: 510ms</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+
+                    <section class="panel workflow-automation">
+                        <div class="panel-header">
+                            <h2 class="panel-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M3 9h18M9 21V9" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                                watsonx Orchestrate - Skills
+                            </h2>
+                        </div>
+                        <div class="panel-content">
+                            <div class="skills-list">
+                                <div class="skill-item">
+                                    <span class="skill-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+                                            <rect x="9" y="3" width="6" height="4" rx="1"/>
+                                            <line x1="9" y1="12" x2="15" y2="12"/>
+                                            <line x1="9" y1="16" x2="13" y2="16"/>
+                                        </svg>
+                                    </span>
+                                    <div class="skill-info">
+                                        <p class="skill-name">Create Jira Ticket</p>
+                                        <p class="skill-detail">Auto-creates tickets from triage results</p>
+                                    </div>
+                                    <span class="skill-status enabled">Enabled</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                        </svg>
+                                    </span>
+                                    <div class="skill-info">
+                                        <p class="skill-name">Slack Notification</p>
+                                        <p class="skill-detail">Alerts technician on severity escalation</p>
+                                    </div>
+                                    <span class="skill-status enabled">Enabled</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                            <polyline points="22,6 12,13 2,6"/>
+                                        </svg>
+                                    </span>
+                                    <div class="skill-info">
+                                        <p class="skill-name">Email Report</p>
+                                        <p class="skill-detail">Daily summary to IT manager</p>
+                                    </div>
+                                    <span class="skill-status enabled">Enabled</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="3"/>
+                                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                                        </svg>
+                                    </span>
+                                    <div class="skill-info">
+                                        <p class="skill-name">Auto-Remediation</p>
+                                        <p class="skill-detail">Execute fix scripts via BobShell</p>
+                                    </div>
+                                    <span class="skill-status disabled">Disabled</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
 
-            <!-- Analytics Tab -->
+            <!-- ===== ANALYTICS TAB ===== -->
             <div id="analyticsTab" class="tab-pane">
-                <section class="panel analytics-panel full-width">
-                    <div class="panel-header">
-                        <h2 class="panel-title">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <path d="M3 17 L9 11 L13 15 L21 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M21 7 L21 13 M21 7 L15 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            Performance Analytics
-                        </h2>
+                <div class="analytics-grid">
+                    <div class="chart-card">
+                        <h3>Task Completion Rate</h3>
+                        <div class="chart-visual">
+                            <div class="bar-chart">
+                                <div class="bar" style="height: 85%;"><span>Mon</span></div>
+                                <div class="bar" style="height: 92%;"><span>Tue</span></div>
+                                <div class="bar" style="height: 78%;"><span>Wed</span></div>
+                                <div class="bar" style="height: 95%;"><span>Thu</span></div>
+                                <div class="bar" style="height: 88%;"><span>Fri</span></div>
+                                <div class="bar" style="height: 65%;"><span>Sat</span></div>
+                                <div class="bar" style="height: 45%;"><span>Sun</span></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="panel-content">
-                        <div class="analytics-grid">
-                            <div class="chart-card">
-                                <h3>Task Completion Rate</h3>
-                                <div class="chart-placeholder">
-                                    <p>📊 Chart visualization coming soon</p>
-                                </div>
-                            </div>
-                            <div class="chart-card">
-                                <h3>Model Performance</h3>
-                                <div class="chart-placeholder">
-                                    <p>📈 Chart visualization coming soon</p>
-                                </div>
-                            </div>
-                            <div class="chart-card">
-                                <h3>Cost Analysis</h3>
-                                <div class="chart-placeholder">
-                                    <p>💰 Chart visualization coming soon</p>
-                                </div>
-                            </div>
-                            <div class="chart-card">
-                                <h3>Response Times</h3>
-                                <div class="chart-placeholder">
-                                    <p>⏱️ Chart visualization coming soon</p>
+                    <div class="chart-card">
+                        <h3>Model Distribution</h3>
+                        <div class="chart-visual">
+                            <div class="donut-chart">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#E0E0E0" stroke-width="12"/>
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#0F62FE" stroke-width="12"
+                                        stroke-dasharray="130 251" stroke-dashoffset="-62" transform="rotate(-90 50 50)"/>
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#FFD600" stroke-width="12"
+                                        stroke-dasharray="75 251" stroke-dashoffset="-192" transform="rotate(-90 50 50)"/>
+                                    <circle cx="50" cy="50" r="40" fill="none" stroke="#24A148" stroke-width="12"
+                                        stroke-dasharray="46 251" stroke-dashoffset="-267" transform="rotate(-90 50 50)"/>
+                                </svg>
+                                <div class="donut-legend">
+                                    <span class="legend-item"><span class="legend-dot" style="background:#0F62FE"></span>IBM Bob 52%</span>
+                                    <span class="legend-item"><span class="legend-dot" style="background:#FFD600"></span>Groq 30%</span>
+                                    <span class="legend-item"><span class="legend-dot" style="background:#24A148"></span>Ollama 18%</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
+                    <div class="chart-card">
+                        <h3>Cost per Request</h3>
+                        <div class="chart-visual">
+                            <div class="metric-trend">
+                                <div class="trend-value">$0.003</div>
+                                <div class="trend-indicator positive">↓ 40% vs last month</div>
+                                <div class="trend-bars">
+                                    <div class="trend-bar" style="height: 60%"></div>
+                                    <div class="trend-bar" style="height: 55%"></div>
+                                    <div class="trend-bar" style="height: 48%"></div>
+                                    <div class="trend-bar" style="height: 42%"></div>
+                                    <div class="trend-bar" style="height: 38%"></div>
+                                    <div class="trend-bar" style="height: 35%"></div>
+                                    <div class="trend-bar" style="height: 30%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Orchestration ROI</h3>
+                        <div class="chart-visual">
+                            <div class="roi-metric">
+                                <div class="roi-value">3.4x</div>
+                                <div class="roi-label">Return on Orchestration Investment</div>
+                                <div class="roi-breakdown">
+                                    <div class="roi-item">
+                                        <span class="roi-item-label">Accuracy</span>
+                                        <div class="roi-item-bar"><div class="roi-item-fill" style="width: 94%"></div></div>
+                                    </div>
+                                    <div class="roi-item">
+                                        <span class="roi-item-label">Cost Savings</span>
+                                        <div class="roi-item-bar"><div class="roi-item-fill" style="width: 78%"></div></div>
+                                    </div>
+                                    <div class="roi-item">
+                                        <span class="roi-item-label">Latency</span>
+                                        <div class="roi-item-bar"><div class="roi-item-fill" style="width: 88%"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- Settings Tab -->
+            <!-- ===== SETTINGS TAB ===== -->
             <div id="settingsTab" class="tab-pane">
-                <section class="panel settings-panel full-width">
-                    <div class="panel-header">
-                        <h2 class="panel-title">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-                                <path d="M12 1v3m0 16v3M4.22 4.22l2.12 2.12m11.32 11.32l2.12 2.12M1 12h3m16 0h3M4.22 19.78l2.12-2.12m11.32-11.32l2.12-2.12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            System Settings
-                        </h2>
-                    </div>
-                    <div class="panel-content">
-                        <div class="settings-grid">
-                            <div class="settings-section">
-                                <h3>General Settings</h3>
-                                <div class="setting-item">
-                                    <label>Default AI Provider</label>
-                                    <select class="form-input">
-                                        <option value="watsonx">IBM watsonx.ai</option>
-                                        <option value="groq">Groq</option>
-                                        <option value="ollama">Ollama</option>
-                                    </select>
-                                </div>
-                                <div class="setting-item">
-                                    <label>Auto-approve Tasks</label>
-                                    <input type="checkbox" class="toggle-switch">
-                                </div>
-                            </div>
-                            <div class="settings-section">
-                                <h3>Notifications</h3>
-                                <div class="setting-item">
-                                    <label>Enable Notifications</label>
-                                    <input type="checkbox" class="toggle-switch" checked>
-                                </div>
-                                <div class="setting-item">
-                                    <label>Email Alerts</label>
-                                    <input type="checkbox" class="toggle-switch">
-                                </div>
-                            </div>
-                            <div class="settings-section">
-                                <h3>API Configuration</h3>
-                                <div class="setting-item">
-                                    <label>Backend URL</label>
-                                    <input type="text" class="form-input" value="http://localhost:8000" readonly>
-                                </div>
-                                <div class="setting-item">
-                                    <label>API Key</label>
-                                    <input type="password" class="form-input" placeholder="Enter API key">
-                                </div>
-                            </div>
+                <div class="settings-grid">
+                    <div class="settings-section">
+                        <h3>General</h3>
+                        <div class="setting-item">
+                            <label>Default AI Provider</label>
+                            <select class="form-input">
+                                <option value="watsonx">IBM watsonx.ai (Bob)</option>
+                                <option value="groq">Groq</option>
+                                <option value="ollama">Ollama</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Auto-approve Tasks</label>
+                            <input type="checkbox" class="toggle-switch">
+                        </div>
+                        <div class="setting-item">
+                            <label>Pydantic Strict Validation</label>
+                            <input type="checkbox" class="toggle-switch" checked>
                         </div>
                     </div>
-                </section>
+                    <div class="settings-section">
+                        <h3>Notifications</h3>
+                        <div class="setting-item">
+                            <label>Enable Notifications</label>
+                            <input type="checkbox" class="toggle-switch" checked>
+                        </div>
+                        <div class="setting-item">
+                            <label>Email Alerts</label>
+                            <input type="checkbox" class="toggle-switch">
+                        </div>
+                        <div class="setting-item">
+                            <label>Slack Integration</label>
+                            <input type="checkbox" class="toggle-switch" checked>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h3>API Configuration</h3>
+                        <div class="setting-item">
+                            <label>Backend URL</label>
+                            <input type="text" class="form-input" value="http://localhost:8000" readonly>
+                        </div>
+                        <div class="setting-item">
+                            <label>API Key</label>
+                            <input type="password" class="form-input" placeholder="Enter API key">
+                        </div>
+                        <div class="setting-item">
+                            <label>MCP Server URL</label>
+                            <input type="text" class="form-input" placeholder="http://localhost:3001">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- Harmonic Assistant Panel -->
-    <aside class="harmonic-panel">
-        <div class="harmonic-header">
-            <div class="harmonic-avatar">
-                <div class="avatar-glow"></div>
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                    <circle cx="20" cy="20" r="18" stroke="url(#harmonicGradient)" stroke-width="2"/>
-                    <path d="M20 10 L20 30 M12 20 L28 20" stroke="url(#harmonicGradient)" stroke-width="2" stroke-linecap="round"/>
-                    <circle cx="20" cy="20" r="4" fill="url(#harmonicGradient)"/>
-                </svg>
-                <defs>
-                    <linearGradient id="harmonicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#0F62FE;stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:#FFD600;stop-opacity:1" />
-                    </linearGradient>
-                </defs>
+    <!-- Harmonic Floating Bubble -->
+    <div class="harmonic-bubble" id="harmonicBubble">
+        <div class="bubble-avatar">
+            <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="18" stroke="white" stroke-width="2"/>
+                <path d="M20 10 L20 30 M12 20 L28 20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="20" cy="20" r="4" fill="white"/>
+            </svg>
+        </div>
+        <span class="bubble-label">Harmonic</span>
+    </div>
+
+    <!-- Harmonic Chat Window -->
+    <div class="harmonic-chat" id="harmonicChat">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="chat-avatar">
+                    <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" stroke="white" stroke-width="2"/>
+                        <path d="M20 10 L20 30 M12 20 L28 20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="20" cy="20" r="4" fill="white"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="chat-name">Harmonic</h3>
+                    <span class="chat-status" id="chatStatus">Analyzing system state...</span>
+                </div>
             </div>
-            <div class="harmonic-info">
-                <h3 class="harmonic-name">Harmonic</h3>
-                <span class="harmonic-status">Analyzing system state...</span>
-            </div>
-            <button class="minimize-button">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <button class="chat-close" id="chatClose">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </button>
         </div>
-        
-        <div class="harmonic-content">
-            <div class="insight-card">
-                <div class="insight-icon">💡</div>
-                <div class="insight-text">
-                    <h4>System Insight</h4>
-                    <p>Current workflow is optimized for accuracy. IBM Bob selected for enterprise-grade reliability.</p>
-                </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message harmonic">
+                <p>Welcome! I'm Harmonic, your AI orchestration assistant. How can I help you today?</p>
             </div>
-            
-            <div class="insight-card">
-                <div class="insight-icon">⚡</div>
-                <div class="insight-text">
-                    <h4>Performance Note</h4>
-                    <p>Consider Groq for 3x faster execution if speed is prioritized over cost.</p>
-                </div>
-            </div>
-            
-            <div class="insight-card">
-                <div class="insight-icon">🎯</div>
-                <div class="insight-text">
-                    <h4>Recommendation</h4>
-                    <p>Human approval checkpoint detected. Review plan mode before proceeding.</p>
-                </div>
+            <div class="chat-message harmonic">
+                <p>All 3 providers are online and operational. Current ROI: 3.4x</p>
             </div>
         </div>
-        
-        <div class="harmonic-input">
-            <input type="text" placeholder="Ask Harmonic anything..." class="harmonic-textbox">
-            <button class="send-button">
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Ask Harmonic anything..." autocomplete="off">
+            <button id="chatSend">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
         </div>
-    </aside>
+    </div>
 
-    <!-- Triage Input Modal -->
+    <!-- Triage Modal -->
     <div id="triageModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🎯 IT Issue Triage</h2>
-                <button class="modal-close" onclick="closeTriageModal()">×</button>
+                <h2>IT Issue Triage</h2>
+                <button class="modal-close" id="triageClose">×</button>
             </div>
             <div class="modal-body">
                 <form id="triageForm">
@@ -658,7 +983,7 @@
                     </div>
                     <div class="form-group">
                         <label for="issueDescription">Issue Description</label>
-                        <textarea id="issueDescription" class="form-input" rows="4" placeholder="Describe the IT issue in detail..." required></textarea>
+                        <textarea id="issueDescription" class="form-input" rows="4" placeholder="Describe the IT issue..." required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="providerSelect">AI Provider</label>
@@ -669,20 +994,19 @@
                         </select>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn-secondary" onclick="closeTriageModal()">Cancel</button>
+                        <button type="button" class="btn-secondary" id="triageCancel">Cancel</button>
                         <button type="submit" class="btn-primary" id="triageSubmitBtn">
                             <span class="btn-text">Analyze Issue</span>
                             <span class="btn-loader" style="display: none;">⟳</span>
                         </button>
                     </div>
                 </form>
-                <div id="triageResult" class="triage-result" style="display: none;"></div>
+                <div id="triageResult" style="display: none;"></div>
             </div>
         </div>
     </div>
 
-    <!-- Floating Action Button -->
-    <button class="fab" onclick="openTriageModal()" title="New Triage Request">
+    <button class="fab" id="fabBtn" title="New Triage Request">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
