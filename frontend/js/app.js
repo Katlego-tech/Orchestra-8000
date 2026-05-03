@@ -39,7 +39,211 @@ document.addEventListener('DOMContentLoaded', () => {
     startSystemSimulation();
     startCPUMonitoring();
     initPageTransitions();
+    initializeDashboardData();
+    startDataRefresh();
 });
+
+// ===== Dashboard Data Management =====
+function initializeDashboardData() {
+    updateDashboardStats();
+    updateRecentActivity();
+    updateProviderStatus();
+    updateMCPData();
+    updateSystemMonitoring();
+    updateModelMetrics();
+    updateAnalytics();
+}
+
+function startDataRefresh() {
+    // Refresh dashboard data every 5 seconds
+    setInterval(() => {
+        updateDashboardStats();
+        updateSystemMonitoring();
+    }, 5000);
+    
+    // Refresh activity every 30 seconds
+    setInterval(() => {
+        updateRecentActivity();
+    }, 30000);
+    
+    // Refresh provider status every 10 seconds
+    setInterval(() => {
+        updateProviderStatus();
+    }, 10000);
+}
+
+function updateDashboardStats() {
+    const data = window.DashboardData ? window.DashboardData.generate() : null;
+    if (!data) return;
+    
+    // Update stat cards
+    const statActiveTasks = document.getElementById('statActiveTasks');
+    const statSuccessRate = document.getElementById('statSuccessRate');
+    const statModelsActive = document.getElementById('statModelsActive');
+    const statAvgResponse = document.getElementById('statAvgResponse');
+    
+    if (statActiveTasks) animateValue(statActiveTasks, data.stats.activeTasks);
+    if (statSuccessRate) statSuccessRate.textContent = data.stats.successRate + '%';
+    if (statModelsActive) statModelsActive.textContent = data.stats.modelsActive;
+    if (statAvgResponse) statAvgResponse.textContent = data.stats.avgResponse + 's';
+}
+
+function updateRecentActivity() {
+    const data = window.DashboardData ? window.DashboardData.generate() : null;
+    if (!data) return;
+    
+    const activityList = document.getElementById('activityList');
+    if (!activityList) return;
+    
+    activityList.innerHTML = data.activities.map(activity => `
+        <div class="activity-item">
+            <div class="activity-icon ${activity.type}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    ${getActivityIcon(activity.icon)}
+                </svg>
+            </div>
+            <div class="activity-details">
+                <p class="activity-title">${activity.title}</p>
+                <p class="activity-time">${activity.time}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+function getActivityIcon(type) {
+    const icons = {
+        check: '<polyline points="20 6 9 17 4 12"/>',
+        info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+        alert: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'
+    };
+    return icons[type] || icons.info;
+}
+
+function updateProviderStatus() {
+    const data = window.DashboardData ? window.DashboardData.generate() : null;
+    if (!data) return;
+    
+    // Update provider details in the provider list
+    Object.keys(data.providers).forEach(key => {
+        const provider = data.providers[key];
+        const providerElements = document.querySelectorAll('.provider-item');
+        
+        providerElements.forEach(el => {
+            const nameEl = el.querySelector('.provider-name');
+            if (nameEl && nameEl.textContent.includes(provider.name.split(' ')[0])) {
+                const detailEl = el.querySelector('.provider-detail');
+                if (detailEl) {
+                    detailEl.textContent = `${provider.model} · ${provider.avgLatency}ms avg`;
+                }
+            }
+        });
+    });
+}
+
+function updateMCPData() {
+    const mcpData = window.DashboardData ? window.DashboardData.getMCP() : null;
+    if (!mcpData) return;
+    
+    const mcpSources = document.querySelectorAll('.mcp-source');
+    if (mcpSources.length >= 3) {
+        mcpSources[0].querySelector('.mcp-detail').textContent = `${mcpData.knowledgeBase.docs.toLocaleString()} docs indexed`;
+        mcpSources[1].querySelector('.mcp-detail').textContent = `${mcpData.runbooks.workflows} workflows`;
+        mcpSources[2].querySelector('.mcp-detail').textContent = `${mcpData.incidents.resolved.toLocaleString()} resolved`;
+    }
+}
+
+function updateSystemMonitoring() {
+    const data = window.DashboardData ? window.DashboardData.generate() : null;
+    if (!data) return;
+    
+    // Update CPU
+    const cpuValue = document.getElementById('cpuValue');
+    const cpuBar = document.getElementById('cpuBar');
+    if (cpuValue && cpuBar) {
+        cpuValue.textContent = data.system.cpu + '%';
+        cpuBar.style.width = data.system.cpu + '%';
+        cpuBar.style.backgroundColor = data.system.cpu > 80 ? '#da1e28' : data.system.cpu > 60 ? '#f1c21b' : '#24a148';
+    }
+    
+    // Update Memory
+    const memValue = document.getElementById('memValue');
+    const memBar = document.getElementById('memBar');
+    if (memValue && memBar) {
+        const memGB = (data.system.memory * 8 / 100).toFixed(1);
+        memValue.textContent = memGB + ' GB';
+        memBar.style.width = data.system.memory + '%';
+        memBar.style.backgroundColor = data.system.memory > 90 ? '#da1e28' : data.system.memory > 75 ? '#f1c21b' : '#24a148';
+    }
+    
+    // Update Network
+    const netValue = document.getElementById('netValue');
+    const netBar = document.getElementById('netBar');
+    if (netValue && netBar) {
+        netValue.textContent = data.system.network + ' MB/s';
+        const netPercent = Math.min((parseFloat(data.system.network) / 4) * 100, 100);
+        netBar.style.width = netPercent + '%';
+    }
+    
+    // Update Disk
+    const diskValue = document.getElementById('diskValue');
+    const diskBar = document.getElementById('diskBar');
+    if (diskValue && diskBar) {
+        diskValue.textContent = data.system.disk + ' MB/s';
+        const diskPercent = Math.min((data.system.disk / 500) * 100, 100);
+        diskBar.style.width = diskPercent + '%';
+    }
+}
+
+function updateModelMetrics() {
+    const data = window.DashboardData ? window.DashboardData.generate() : null;
+    if (!data) return;
+    
+    const modelCards = document.querySelectorAll('.model-card');
+    modelCards.forEach(card => {
+        const modelType = card.getAttribute('data-model');
+        if (!modelType || !data.modelMetrics[modelType]) return;
+        
+        const metrics = data.modelMetrics[modelType];
+        const requestsEl = card.querySelector('.model-card-requests');
+        const latencyEl = card.querySelector('.model-card-latency');
+        
+        if (requestsEl) requestsEl.textContent = `${metrics.requests.toLocaleString()} requests today`;
+        if (latencyEl) latencyEl.textContent = `p99: ${metrics.p99Latency}ms`;
+    });
+}
+
+function updateAnalytics() {
+    const data = window.DashboardData ? window.DashboardData.generate() : null;
+    if (!data) return;
+    
+    // Update weekly completion chart
+    const bars = document.querySelectorAll('.bar-chart .bar');
+    if (bars.length === 7 && data.analytics.weeklyCompletion) {
+        bars.forEach((bar, index) => {
+            const value = data.analytics.weeklyCompletion.values[index];
+            bar.style.height = value + '%';
+            bar.style.backgroundColor = value > 85 ? '#24a148' : value > 70 ? '#f1c21b' : '#da1e28';
+        });
+    }
+}
+
+function animateValue(element, targetValue) {
+    const currentValue = parseInt(element.textContent) || 0;
+    const increment = targetValue > currentValue ? 1 : -1;
+    const duration = 500;
+    const steps = Math.abs(targetValue - currentValue);
+    const stepDuration = duration / steps;
+    
+    let current = currentValue;
+    const timer = setInterval(() => {
+        current += increment;
+        element.textContent = current;
+        
+        if (current === targetValue) {
+            clearInterval(timer);
+        }
+    }, stepDuration);
+}
 
 // ===== Navigation =====
 function initializeNavigation() {
