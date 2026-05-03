@@ -108,38 +108,69 @@
             <div class="hero-visual">
                 <div class="visual-card">
                     <div class="card-glow"></div>
-                    <div class="orchestration-demo">
-                        <div class="demo-node demo-input">
-                            <div class="node-icon">📋</div>
-                            <div class="node-label">Task Input</div>
-                            <div class="node-pulse"></div>
+                    <div class="triage-demo">
+                        <h3 class="demo-title">Live Triage Demo</h3>
+                        <p class="demo-subtitle">See how Orchestra 8000 intelligently routes tasks</p>
+                        
+                        <div class="demo-input-section">
+                            <label for="demoTask" class="demo-label">Enter a task:</label>
+                            <textarea id="demoTask" class="demo-textarea" placeholder="e.g., Summarize this document, Write code for a function, Analyze data..." rows="3"></textarea>
+                            <div class="demo-priorities">
+                                <label class="priority-option">
+                                    <input type="radio" name="priority" value="cost" checked>
+                                    <span>💰 Cost</span>
+                                </label>
+                                <label class="priority-option">
+                                    <input type="radio" name="priority" value="speed">
+                                    <span>⚡ Speed</span>
+                                </label>
+                                <label class="priority-option">
+                                    <input type="radio" name="priority" value="accuracy">
+                                    <span>🎯 Accuracy</span>
+                                </label>
+                            </div>
+                            <button id="runTriageBtn" class="demo-button">Run Triage</button>
                         </div>
                         
-                        <svg class="demo-connections" width="100%" height="200">
-                            <defs>
-                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:#0F62FE;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#FFD600;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <path class="demo-line" d="M 150 40 Q 150 100 80 140" stroke="url(#lineGradient)" stroke-width="2" fill="none"/>
-                            <path class="demo-line" d="M 150 40 L 150 140" stroke="url(#lineGradient)" stroke-width="2" fill="none"/>
-                            <path class="demo-line" d="M 150 40 Q 150 100 220 140" stroke="url(#lineGradient)" stroke-width="2" fill="none"/>
-                        </svg>
-                        
-                        <div class="demo-models">
-                            <div class="demo-node demo-model">
-                                <div class="node-icon">🤖</div>
-                                <div class="node-label">IBM Bob</div>
-                                <div class="node-badge">Active</div>
-                            </div>
-                            <div class="demo-node demo-model">
-                                <div class="node-icon">⚡</div>
-                                <div class="node-label">Groq</div>
-                            </div>
-                            <div class="demo-node demo-model">
-                                <div class="node-icon">🦙</div>
-                                <div class="node-label">Ollama</div>
+                        <div id="triageResult" class="triage-result" style="display: none;">
+                            <div class="result-header">
+                                <div class="loading-spinner" id="loadingSpinner">
+                                    <svg width="40" height="40" viewBox="0 0 40 40">
+                                        <circle cx="20" cy="20" r="16" stroke="url(#spinnerGradient)" stroke-width="3" fill="none" stroke-dasharray="80" stroke-linecap="round">
+                                            <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="1s" repeatCount="indefinite"/>
+                                        </circle>
+                                        <defs>
+                                            <linearGradient id="spinnerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" style="stop-color:#0F62FE;stop-opacity:1" />
+                                                <stop offset="100%" style="stop-color:#FFD600;stop-opacity:1" />
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                    <p>Analyzing task...</p>
+                                </div>
+                                <div class="result-content" id="resultContent" style="display: none;">
+                                    <div class="selected-model">
+                                        <div class="model-icon" id="selectedModelIcon"></div>
+                                        <div class="model-info">
+                                            <h4 id="selectedModelName"></h4>
+                                            <p id="selectedModelReason"></p>
+                                        </div>
+                                    </div>
+                                    <div class="triage-metrics">
+                                        <div class="metric">
+                                            <span class="metric-label">Estimated Cost:</span>
+                                            <span class="metric-value" id="metricCost"></span>
+                                        </div>
+                                        <div class="metric">
+                                            <span class="metric-label">Estimated Time:</span>
+                                            <span class="metric-value" id="metricTime"></span>
+                                        </div>
+                                        <div class="metric">
+                                            <span class="metric-label">Confidence:</span>
+                                            <span class="metric-value" id="metricConfidence"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

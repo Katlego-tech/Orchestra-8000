@@ -18,6 +18,32 @@
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+.process-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.process-list li {
+    padding: 0.75rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.process-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--ibm-blue);
+    font-weight: bold;
+}
+
+.process-list li strong {
+    color: var(--text-primary);
+}
+
 }
 
 /* Page Transition Overlay */
